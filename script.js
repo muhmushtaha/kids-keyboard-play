@@ -172,21 +172,27 @@ document.addEventListener('selectstart', function (event) {
 });
 
 // Prevent beforeunload for accidental closure
-window.addEventListener('beforeunload', function (event) {
+const beforeUnloadHandler = function (event) {
   event.preventDefault();
   event.returnValue = '';
   return '';
-});
+};
+
+window.addEventListener('beforeunload', beforeUnloadHandler);
 
 // Exit function (mouse-only)
 function exitPage() {
-  // Remove beforeunload listener before closing
-  window.removeEventListener('beforeunload', arguments.callee);
-
   if (confirm('Are you sure you want to exit? Click OK to exit.')) {
-    // Close the window or go to a blank page
-    window.open('about:blank', '_self');
+    // Remove beforeunload listener before closing
+    window.removeEventListener('beforeunload', beforeUnloadHandler);
+    
+    // Close the window
     window.close();
+    
+    // If close() doesn't work (when not opened by script), redirect to a goodbye message
+    setTimeout(() => {
+      document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:Arial;font-size:24px;text-align:center;">Thanks for playing! 🎉<br><br><small style="font-size:16px;">You can close this tab now.</small></div>';
+    }, 100);
   }
 }
 
