@@ -3,8 +3,35 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Keyboard Play Time! 🎹✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Kids Keyboard Play - Safe Interactive Game for Toddlers & Children</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="A safe, fun keyboard and touch game for toddlers and young children. Colorful animations, playful sounds, and interactive effects. No ads, completely free!">
+  <meta name="keywords" content="kids game, toddler game, children keyboard game, safe game for kids, educational game, baby keyboard, toddler activity, preschool game, free kids game, interactive game for children">
+  <meta name="author" content="Kids Play">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph Meta Tags for Social Sharing -->
+  <meta property="og:title" content="Kids Keyboard Play - Safe Interactive Game for Toddlers">
+  <meta property="og:description" content="A safe, fun keyboard and touch game for toddlers with colorful animations and sounds. Perfect for curious little fingers!">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://muhmushtaha.github.io/kids-keyboard-play/preview.png">
+  <meta property="og:url" content="https://muhmushtaha.github.io/kids-keyboard-play/">
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Kids Keyboard Play - Safe Game for Toddlers">
+  <meta name="twitter:description" content="Interactive keyboard and touch game for young children with colorful animations and sounds">
+  <meta name="twitter:image" content="https://muhmushtaha.github.io/kids-keyboard-play/preview.png">
+  
+  <!-- Additional Meta Tags -->
+  <meta name="theme-color" content="#FF6B6B">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Kids Play">
+  
+  <link rel="canonical" href="https://muhmushtaha.github.io/kids-keyboard-play/">
   <style>
     * {
       margin: 0;
@@ -55,28 +82,45 @@
       overflow: hidden;
     }
 
-    .exit-button {
+    .control-button {
       position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 12px 24px;
-      background: rgba(255, 255, 255, 0.9);
-      border: 3px solid #333;
-      border-radius: 12px;
-      font-size: 18px;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 2px solid #333;
+      border-radius: 8px;
+      font-size: 12px;
       font-weight: bold;
       color: #333;
       cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       transition: all 0.3s ease;
       z-index: 10000;
+    }
+
+    .exit-button {
+      top: 10px;
+      right: 10px;
+    }
+
+    .fullscreen-button {
+      top: 10px;
+      right: 90px;
+    }
+
+    .control-button:hover {
+      background: rgba(255, 255, 255, 1);
+      transform: scale(1.05);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
 
     .exit-button:hover {
       background: rgba(255, 100, 100, 0.9);
       color: white;
-      transform: scale(1.1);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .fullscreen-button:hover {
+      background: rgba(100, 200, 255, 0.9);
+      color: white;
     }
 
     .visual-effect {
@@ -245,7 +289,8 @@
 <body>
   <div id="container">
     <div id="effects-container"></div>
-    <button class="exit-button" onclick="exitPage()">EXIT (Mouse Only)</button>
+    <button class="control-button fullscreen-button" onclick="toggleFullscreen()">⛶ FULLSCREEN</button>
+    <button class="control-button exit-button" onclick="exitPage()">✕ EXIT</button>
   </div>
 
   <script>
@@ -440,6 +485,71 @@
         window.close();
       }
     }
+
+    // Toggle fullscreen function
+    function toggleFullscreen() {
+      const elem = document.documentElement;
+      
+      if (!document.fullscreenElement && !document.webkitFullscreenElement && 
+          !document.mozFullScreenElement && !document.msFullscreenElement) {
+        // Enter fullscreen
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) {
+          elem.webkitRequestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+          elem.mozRequestFullScreen();
+        } else if (elem.msRequestFullscreen) {
+          elem.msRequestFullscreen();
+        }
+      } else {
+        // Exit fullscreen
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      }
+    }
+
+    // Handle touch events for mobile devices
+    let touchActive = false;
+    
+    document.addEventListener('touchstart', function(event) {
+      // Don't trigger if touching buttons
+      if (event.target.closest('.control-button')) {
+        return;
+      }
+      
+      // Initialize audio on first touch
+      initAudio();
+      
+      // Prevent default touch behavior
+      event.preventDefault();
+      
+      touchActive = true;
+      
+      // Play sound and create visual effect for each touch point
+      for (let i = 0; i < event.touches.length; i++) {
+        playSound();
+        createVisualEffect();
+      }
+    }, { passive: false });
+
+    document.addEventListener('touchmove', function(event) {
+      event.preventDefault();
+    }, { passive: false });
+
+    document.addEventListener('touchend', function(event) {
+      if (!event.target.closest('.control-button')) {
+        event.preventDefault();
+      }
+      touchActive = false;
+    }, { passive: false });
 
     // Prevent F11 and other fullscreen toggles
     window.addEventListener('keydown', function (event) {
