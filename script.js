@@ -185,10 +185,10 @@ function exitPage() {
   if (confirm('Are you sure you want to exit? Click OK to exit.')) {
     // Remove beforeunload listener before closing
     window.removeEventListener('beforeunload', beforeUnloadHandler);
-    
+
     // Close the window
     window.close();
-    
+
     // If close() doesn't work (when not opened by script), redirect to a goodbye message
     setTimeout(() => {
       document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:Arial;font-size:24px;text-align:center;">Thanks for playing! 🎉<br><br><small style="font-size:16px;">You can close this tab now.</small></div>';
@@ -199,9 +199,9 @@ function exitPage() {
 // Toggle fullscreen function
 function toggleFullscreen() {
   const elem = document.documentElement;
-  
-  if (!document.fullscreenElement && !document.webkitFullscreenElement && 
-      !document.mozFullScreenElement && !document.msFullscreenElement) {
+
+  if (!document.fullscreenElement && !document.webkitFullscreenElement &&
+    !document.mozFullScreenElement && !document.msFullscreenElement) {
     // Enter fullscreen
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
@@ -229,20 +229,20 @@ function toggleFullscreen() {
 // Handle touch events for mobile devices
 let touchActive = false;
 
-document.addEventListener('touchstart', function(event) {
+document.addEventListener('touchstart', function (event) {
   // Don't trigger if touching buttons
   if (event.target.closest('.control-button')) {
     return;
   }
-  
+
   // Initialize audio on first touch
   initAudio();
-  
+
   // Prevent default touch behavior
   event.preventDefault();
-  
+
   touchActive = true;
-  
+
   // Play sound and create visual effect for each touch point
   for (let i = 0; i < event.touches.length; i++) {
     playSound();
@@ -250,11 +250,11 @@ document.addEventListener('touchstart', function(event) {
   }
 }, { passive: false });
 
-document.addEventListener('touchmove', function(event) {
+document.addEventListener('touchmove', function (event) {
   event.preventDefault();
 }, { passive: false });
 
-document.addEventListener('touchend', function(event) {
+document.addEventListener('touchend', function (event) {
   if (!event.target.closest('.control-button')) {
     event.preventDefault();
   }
